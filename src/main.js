@@ -10,4 +10,18 @@ app.use(express.json())
 dbConnection()
 app.use("/auth", userRouter)
 
+
+
+
+// global handle error 
+app.use((error, req, res, next) => {
+    let stack = env.mode == "prod" ? err.stack : null
+    let status = error.cause ? error.cause.status : 500
+    res.status(status).json({
+        message: error.message,
+        stack
+    })
+})
+
+
 app.listen(env.port, () => console.log(`Example app listening on port ${env.port}!`)) 
