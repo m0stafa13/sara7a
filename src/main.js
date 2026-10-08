@@ -15,7 +15,7 @@ app.use("/auth", userRouter)
 
 // global handle error 
 app.use((error, req, res, next) => {
-    let stack = env.mode == "prod" ? err.stack : null
+    let stack = env.mode == "prod" ? error.stack : null
     let status = error.cause ? error.cause.status : 500
     res.status(status).json({
         message: error.message,
