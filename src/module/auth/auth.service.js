@@ -1,4 +1,4 @@
-import { BadRequestException, checkPassword, ConflictException, generateToken, hashPassword, NotFoundException } from "../../common/index.js"
+import { BadRequestException, checkPassword, ConflictException, generateAccessToken, generateToken, hashPassword, NotFoundException } from "../../common/index.js"
 import { userModel } from "../../db/model/user.model.js"
 
 export const signUp = async (body) => {
@@ -61,4 +61,18 @@ export const getUserByIdToken = async (data) => {
     } else {
         return NotFoundException({ message: "user not found" })
     }
+}
+//generate access token from refreshToken 
+export const generateAccessTokenFromRefreshToken = async (refresh) => {
+    let { refreshToken } = refresh
+    let { accessToken } = generateAccessToken(refreshToken)
+    if (accessToken) {
+        return {
+            message: "access token created successfully",
+            token: accessToken
+        }
+    } else {
+        return BadRequestException({ message: "invalid token" })
+    }
+
 }

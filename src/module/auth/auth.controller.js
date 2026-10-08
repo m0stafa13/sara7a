@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getUserByIdToken, signIn, signUp } from "./auth.service.js";
+import { generateAccessTokenFromRefreshToken, getUserByIdToken, signIn, signUp } from "./auth.service.js";
 import { auth } from "../../common/index.js";
 let router = Router()
 // sign up 
@@ -17,8 +17,11 @@ router.get("/get-user-by-id-token", auth, async (req, res) => {
     let data = await getUserByIdToken(req.user)
     res.json(data)
 })
-
-
+// get access from refresh token
+router.get("/generate-access-token", async (req, res) => {
+    let data = await generateAccessTokenFromRefreshToken(req.body)
+    res.json(data)
+})
 
 
 export default router
