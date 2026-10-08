@@ -40,9 +40,6 @@ export const signIn = async (body) => {
     if (passwordResult) {
         // create token 
         let { accessToken, refreshToken } = await generateToken(checkEmail)
-
-
-
         return {
             message: "user login successfully",
             token: accessToken,
@@ -50,5 +47,18 @@ export const signIn = async (body) => {
         }
     } else {
         return BadRequestException({ message: "Password is not correct" })
+    }
+}
+// get user data by toke
+export const getUserByIdToken = async (data) => {
+    let { id } = data
+    let findUser = await userModel.findById(id)
+    if (findUser) {
+        return {
+            message: "user founded successfully",
+            user: findUser
+        }
+    } else {
+        return NotFoundException({ message: "user not found" })
     }
 }

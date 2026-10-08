@@ -1,5 +1,6 @@
 import { Router } from "express";
-import { signIn, signUp } from "./auth.service.js";
+import { getUserByIdToken, signIn, signUp } from "./auth.service.js";
+import { auth } from "../../common/index.js";
 let router = Router()
 // sign up 
 router.post("/sign-up", async (req, res) => {
@@ -9,9 +10,13 @@ router.post("/sign-up", async (req, res) => {
 // sign in 
 router.get("/sign-in", async (req, res) => {
     let data = await signIn(req.body)
-    res.json(data) 
+    res.json(data)
 })
-
+// get user by id from token 
+router.get("/get-user-by-id-token", auth, async (req, res) => {
+    let data = await getUserByIdToken(req.user)
+    res.json(data)
+})
 
 
 
