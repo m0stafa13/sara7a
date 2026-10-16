@@ -1,16 +1,17 @@
 import { Router } from "express";
 import { generateAccessTokenFromRefreshToken, getUserByIdToken, signIn, signUp } from "./auth.service.js";
 import { auth, validator } from "../../common/index.js";
-import { signUpSchema } from "./auth.validation.js";
+import { signUpSchema, singInSchema } from "./auth.validation.js";
 let router = Router()
 // sign up 
-router.post("/sign-up", async (req, res) => {
-    let data = await signUp(req.body)
+router.post("/sign-up", validator(singInSchema), async (req, res) => {
+
+    let data = await signUp(req.data)
     res.json(data)
 })
 // sign in 
 router.get("/sign-in", validator(signUpSchema), async (req, res) => {
-    let data = await signIn(req.body)
+    let data = await signIn(req.data)
     res.json(data)
 })
 // get user by id from token 

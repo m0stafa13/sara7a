@@ -10,9 +10,10 @@ app.use("/auth", userRouter)
 app.use((error, req, res, next) => {
     let stack = env.mode == "prod" ? error.stack : null
     let status = error.cause ? error.cause.status : 500
+    let extra = error.cause ? error.cause.extra : null
     res.status(status).json({
         message: error.message,
-        stack
+        stack, extra
     })
 })
 
