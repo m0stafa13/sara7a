@@ -99,3 +99,16 @@ export const verifyAccount = async (data) => {
         return NotFoundException({ message: "user email not found" })
     }
 }
+// get all users 
+export const getAllUsers = async () => {
+    let users = await userModel.find()
+    if (users.length > 0) {
+        return {
+            message: "users found successfully",
+            users
+        }
+    }
+    return {
+        message: "no user founded"
+    }
+} 

@@ -1,4 +1,4 @@
-import z from "zod"
+import z, { email } from "zod"
 // sign up schema 
 export let signUpSchema = z.strictObject({
     email: z.email({ error: "Email is invalid" }),
@@ -13,4 +13,10 @@ export let singInSchema = signUpSchema.extend({
     return val.password == val.confirmPassword
 }, {
     error: "Confirm password must match password"
+})
+
+// verify account validation 
+export const otpSchema = z.strictObject({
+    email: z.email(),
+    otp: z.string().length(6)
 })

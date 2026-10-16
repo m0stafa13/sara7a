@@ -1,7 +1,8 @@
 import { Router } from "express";
-import { generateAccessTokenFromRefreshToken, getUserByIdToken, signIn, signUp, verifyAccount } from "./auth.service.js";
+import { generateAccessTokenFromRefreshToken, getAllUsers, getUserByIdToken, signIn, signUp, verifyAccount } from "./auth.service.js";
 import { auth, validator } from "../../common/index.js";
-import { signUpSchema, singInSchema } from "./auth.validation.js";
+import { otpSchema, signUpSchema, singInSchema } from "./auth.validation.js";
+import { checkRole } from "../../common/service/checkRole.js";
 let router = Router()
 // sign up 
 router.post("/sign-up", validator(singInSchema), async (req, res) => {
@@ -24,8 +25,14 @@ router.get("/generate-access-token", async (req, res) => {
     res.json(data)
 })
 // verify account using otp 
-router.put("/verify-account", async (req, res) => {
-    let data = await verifyAccount(req.body)
+router.put("/verify-account", validator(otpSchema), async (req, res) => {
+    let data = await verifyAccount(req.data)
+    res.json(data)
+})
+// get all users 
+// checkRole is middleware to check authority 1 for admin , 0 form users
+router.get("/get-all-users", auth, checkRole("1"), async (req, res) => {
+    let data = await getAllUsers()
     res.json(data)
 })
 
