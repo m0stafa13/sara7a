@@ -1,11 +1,10 @@
 import { Router } from "express";
-import { generateAccessTokenFromRefreshToken, getUserByIdToken, signIn, signUp } from "./auth.service.js";
+import { generateAccessTokenFromRefreshToken, getUserByIdToken, signIn, signUp, verifyAccount } from "./auth.service.js";
 import { auth, validator } from "../../common/index.js";
 import { signUpSchema, singInSchema } from "./auth.validation.js";
 let router = Router()
 // sign up 
 router.post("/sign-up", validator(singInSchema), async (req, res) => {
-
     let data = await signUp(req.data)
     res.json(data)
 })
@@ -22,6 +21,11 @@ router.get("/get-user-by-id-token", auth, async (req, res) => {
 // get access from refresh token
 router.get("/generate-access-token", async (req, res) => {
     let data = await generateAccessTokenFromRefreshToken(req.body)
+    res.json(data)
+})
+// verify account using otp 
+router.put("/verify-account", async (req, res) => {
+    let data = await verifyAccount(req.body)
     res.json(data)
 })
 

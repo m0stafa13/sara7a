@@ -1,12 +1,9 @@
 import { BadRequestException, checkPassword, ConflictException, generateAccessToken, generateToken, hashPassword, NotFoundException } from "../../common/index.js"
+import { sendEmail } from "../../common/service/sendEmail.service.js"
 import { userModel } from "../../db/model/user.model.js"
 // sign up 
 export const signUp = async (body) => {
-    let { name, email, password, gender, age, confirmPassword } = body
-    // check if password is match with confirm password
-    if (password != confirmPassword) {
-        return BadRequestException({ message: "confirm password is not match password " })
-    }
+    let { name, email, password, gender, age } = body
     // check if user name is already exist
     let checkUserEmail = await userModel.findOne({ email })
     if (checkUserEmail) {
@@ -14,8 +11,12 @@ export const signUp = async (body) => {
     }
     // hash password 
     let newPassword = await hashPassword({ planText: password })
+    // crate otp
+    let otp = Math.round(Math.random() * 1000000)
+    // call send email function 
+    sendEmail({ to: email, message: otp, subject: "OTP to verify sara7a account" })
     // add user to database
-    let addUser = await userModel.create({ email, name, password: newPassword, gender, age })
+    let addUser = await userModel.create({ email, name, password: newPassword, gender, age, otp })
     if (addUser) {
         return {
             message: "user added successfully",
@@ -75,4 +76,26 @@ export const generateAccessTokenFromRefreshToken = async (refresh) => {
         return BadRequestException({ message: "invalid token" })
     }
 
+}
+// api to verify account
+export const verifyAccount = async (data) => {
+    let { email, otp } = data
+    let findUser = await userModel.findOne({ email })
+    if (findUser) {
+        if (findUser.isVerified) {
+            return BadRequestException({ message: "User account already verified" })
+        } else if (findUser.otp == otp) {
+            findUser.isVerified = true
+            findUser.otp = null
+            await findUser.save()
+            return {
+                message: "account verified successfully",
+                user: findUser
+            }
+        } else {
+            return BadRequestException({ message: "Otp is not correct" })
+        }
+    } else {
+        return NotFoundException({ message: "user email not found" })
+    }
 }

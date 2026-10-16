@@ -10,13 +10,19 @@ let adminSignature = process.env.ADMIN_SIGNATURE
 let userRefreshSignature = process.env.USER_REFRESH_SIGNATURE
 let adminRefreshSignature = process.env.ADMIN_REFRESH_SIGNATURE
 let mode = process.env.MODE
+let appPassword = process.env.APP_PASSWORD
+let appEmail = process.env.APP_EMAIL
+
+
 export const env = {
     uri,
     port,
     salt,
     mode,
     userRefreshSignature,
-    adminRefreshSignature, 
+    adminRefreshSignature,
     userSignature,
-    adminSignature
+    adminSignature,
+    appPassword,
+    appEmail
 }
