@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { generateAccessTokenFromRefreshToken, getUserByIdToken, signIn, signUp } from "./auth.service.js";
-import { auth } from "../../common/index.js";
+import { auth, validator } from "../../common/index.js";
+import { signUpSchema } from "./auth.validation.js";
 let router = Router()
 // sign up 
 router.post("/sign-up", async (req, res) => {
@@ -8,7 +9,7 @@ router.post("/sign-up", async (req, res) => {
     res.json(data)
 })
 // sign in 
-router.get("/sign-in", async (req, res) => {
+router.get("/sign-in", validator(signUpSchema), async (req, res) => {
     let data = await signIn(req.body)
     res.json(data)
 })

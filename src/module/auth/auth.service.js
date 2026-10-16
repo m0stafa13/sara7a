@@ -1,6 +1,6 @@
 import { BadRequestException, checkPassword, ConflictException, generateAccessToken, generateToken, hashPassword, NotFoundException } from "../../common/index.js"
 import { userModel } from "../../db/model/user.model.js"
-
+// sign up 
 export const signUp = async (body) => {
     let { name, email, password, gender, age, confirmPassword } = body
     // check if password is match with confirm password

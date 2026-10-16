@@ -3,16 +3,9 @@ import { env } from './config/config.service.js'
 import { dbConnection } from './db/connection/connection.js'
 import userRouter from './module/auth/auth.controller.js'
 const app = express()
-
-
-
 app.use(express.json())
 dbConnection()
 app.use("/auth", userRouter)
-
-
-
-
 // global handle error 
 app.use((error, req, res, next) => {
     let stack = env.mode == "prod" ? error.stack : null
