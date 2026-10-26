@@ -4,10 +4,11 @@ import { dbConnection } from './db/connection/connection.js'
 import userRouter from './module/auth/auth.controller.js'
 import { fileURLToPath } from 'node:url';
 import path from 'path';
+import { redisConnection } from './db/redis/connection.js';
 const app = express()
 app.use(express.json())
 dbConnection()
-
+export const client = await redisConnection()
 // to get static files in uploads file 
 const __filename = fileURLToPath(import.meta.url)
 const __direname = path.dirname(__filename)
