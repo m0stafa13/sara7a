@@ -2,7 +2,11 @@ import { BadRequestException, checkPassword, ConflictException, generateAccessTo
 import { sendEmail } from "../../common/service/sendEmail.service.js"
 import { userModel } from "../../db/model/user.model.js"
 // sign up 
-export const signUp = async (body) => {
+export const signUp = async (body, file) => {
+    let profileImage;
+    if (file) {
+        profileImage = file.path
+    }
     let { name, email, password, gender, age } = body
     // check if user name is already exist
     let checkUserEmail = await userModel.findOne({ email })
@@ -16,7 +20,7 @@ export const signUp = async (body) => {
     // call send email function 
     sendEmail({ to: email, message: otp, subject: "OTP to verify sara7a account" })
     // add user to database
-    let addUser = await userModel.create({ email, name, password: newPassword, gender, age, otp })
+    let addUser = await userModel.create({ email, name, password: newPassword, gender, age, otp, profileImage })
     if (addUser) {
         return {
             message: "user added successfully",

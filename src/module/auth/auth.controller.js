@@ -3,10 +3,11 @@ import { generateAccessTokenFromRefreshToken, getAllUsers, getUserByIdToken, sig
 import { auth, validator } from "../../common/index.js";
 import { otpSchema, signUpSchema, singInSchema } from "./auth.validation.js";
 import { checkRole } from "../../common/service/checkRole.js";
+import { upload } from "../../common/middleware/multer.js";
 let router = Router()
 // sign up 
-router.post("/sign-up", validator(singInSchema), async (req, res) => {
-    let data = await signUp(req.data)
+router.post("/sign-up", upload().single("image"), validator(singInSchema), async (req, res) => {
+    let data = await signUp(req.data, req.file)
     res.json(data)
 })
 // sign in 
@@ -38,3 +39,7 @@ router.get("/get-all-users", auth, checkRole("1"), async (req, res) => {
 
 
 export default router
+
+
+
+
