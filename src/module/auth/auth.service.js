@@ -1,6 +1,7 @@
 import { BadRequestException, checkPassword, ConflictException, generateAccessToken, generateToken, hashPassword, NotFoundException } from "../../common/index.js"
 import { sendEmail } from "../../common/service/sendEmail.service.js"
 import { userModel } from "../../db/model/user.model.js"
+import { get, set } from "../../db/redis/index.js";
 // sign up 
 export const signUp = async (body, file) => {
     let profileImage;
@@ -20,7 +21,8 @@ export const signUp = async (body, file) => {
     // call send email function 
     sendEmail({ to: email, message: otp, subject: "OTP to verify sara7a account" })
     // add user to database
-    let addUser = await userModel.create({ email, name, password: newPassword, gender, age, otp, profileImage })
+    let addUser = await userModel.create({ email, name, password: newPassword, gender, age, profileImage })
+    await set(`otp::${addUser._id}`, otp, 200)
     if (addUser) {
         return {
             message: "user added successfully",
@@ -39,6 +41,9 @@ export const signIn = async (body) => {
     let checkEmail = await userModel.findOne({ email })
     if (!checkEmail) {
         return NotFoundException({ message: "User email is not found" })
+    }
+    if (!checkEmail.isVerified) {
+        return BadRequestException({ message: "Account is not verified" })
     }
     // compare passwords
     let passwordResult = await checkPassword(password, checkEmail.password)
@@ -79,18 +84,20 @@ export const generateAccessTokenFromRefreshToken = async (refresh) => {
     } else {
         return BadRequestException({ message: "invalid token" })
     }
-
 }
 // api to verify account
 export const verifyAccount = async (data) => {
     let { email, otp } = data
     let findUser = await userModel.findOne({ email })
     if (findUser) {
+        let redisOtp = await get(`otp::${findUser._id}`)
+        console.log(redisOtp);
+
         if (findUser.isVerified) {
             return BadRequestException({ message: "User account already verified" })
-        } else if (findUser.otp == otp) {
+        } else if (redisOtp == otp) {
             findUser.isVerified = true
-            findUser.otp = null
+            findUser.__v = findUser.__v + 1
             await findUser.save()
             return {
                 message: "account verified successfully",

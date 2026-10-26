@@ -23,8 +23,6 @@ const userSchema = mongoose.Schema({
         type: String,
         enum: genderEnum,
         default: genderEnum.Mail
-    }, otp: {
-        type: String
     },
     role: {
         type: String,

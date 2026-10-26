@@ -1,0 +1,23 @@
+import { client } from "../../main.js";
+
+export const get = (key) => {
+    return client.get(key)
+}
+export const set = (key, value, EX) => {
+    return client.set(key, value, { EX })
+}
+export const del = (key) => {
+    return client.del(key)
+}
+export const ttl = (key) => {
+    return client.ttl(key)
+}
+export const incr = (key) => {
+    return client.incr(key)
+}
+export const decr = (key) => {
+    return client.decr(key)
+}
+export const exists = (key) => {
+    return client.exists(key)
+}   
