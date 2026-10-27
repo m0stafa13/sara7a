@@ -91,8 +91,6 @@ export const verifyAccount = async (data) => {
     let findUser = await userModel.findOne({ email })
     if (findUser) {
         let redisOtp = await get(`otp::${findUser._id}`)
-        console.log(redisOtp);
-
         if (findUser.isVerified) {
             return BadRequestException({ message: "User account already verified" })
         } else if (redisOtp == otp) {
@@ -123,3 +121,46 @@ export const getAllUsers = async () => {
         message: "no user founded"
     }
 } 
+
+
+
+
+
+
+// export const signIn = async (body) => {
+//     let { email, password } = body
+//     // check email found or not 
+//     let checkEmail = await userModel.findOne({ email })
+//     if (!checkEmail) {
+//         return NotFoundException({ message: "User email is not found" })
+//     }
+//     if (!checkEmail.isVerified) {
+//         return BadRequestException({ message: "Account is not verified" })
+//     }
+//     let checkAccepted = exists(`acceptLogin${checkEmail._id}`)
+//     if (checkAccepted = 0) {
+//         set(`acceptLogin${checkEmail._id}`, 1, undefined)
+//     }
+//     let acceptLogin = await get(`acceptLogin${checkEmail._id}`)
+//     if (!acceptLogin >= 5) {
+//         // compare passwords
+//         let passwordResult = await checkPassword(password, checkEmail.password)
+//         if (passwordResult) {
+//             set(`acceptLogin${checkEmail._id}`, 0, undefined)
+//             // create token 
+//             let { accessToken, refreshToken } = await generateToken(checkEmail)
+//             return {
+//                 message: "user login successfully",
+//                 token: accessToken,
+//                 refreshToken
+//             }
+//         } else {
+//             incr(`acceptLogin${checkEmail._id}`)
+//             return BadRequestException({ message: "Password is not correct" })
+//         }
+//     } else {
+//         exists(`acceptLogin${checkEmail._id}`, 300)
+//         return BadRequestException({ message: "you are not valid to login now" })
+//     }
+
+// }
