@@ -29,35 +29,6 @@ copy .env.dev .env
 # OR create .env file with the following structure:
 ```
 
-### 4. Configure environment variables
-Create a `.env` file based on `.env.dev`:
-```env
-# Port
-PORT=4000
-
-# Mode (dev/prod)
-MODE=dev
-
-# MongoDB URI (local or Atlas)
-URI=mongodb://localhost:27017/sara7a_app
-
-# bcrypt salt rounds
-SALT_ROUND=8
-
-# JWT signatures (generate secure random strings)
-USER_SIGNATURE=your_user_signature_here
-ADMIN_SIGNATURE=your_admin_signature_here
-USER_REFRESH_SIGNATURE=your_user_refresh_signature_here
-ADMIN_REFRESH_SIGNATURE=your_admin_refresh_signature_here
-
-# Application settings
-APP_PASSWORD=your_app_password
-APP_EMAIL=your_gmail@example.com
-
-# Redis URI (Upstash or local)
-REDIS_URI=redis://localhost:6379
-```
-
 ## 🚀 Available Scripts
 
 | Script | Description |
