@@ -9,26 +9,6 @@ Sara7a is a Node.js (Express) backend application that provides authentication, 
 - Redis (local or Upstash)
 - Gmail account (for email functionality) OR configure your own email service
 
-## 📦 Installation
-
-### 1. Clone the repository
-```bash
-git clone <your-repo-url>
-cd code
-```
-
-### 2. Install dependencies
-```bash
-npm install
-```
-
-### 3. Environment setup
-Copy the development environment file and configure your settings:
-```bash
-copy .env.dev .env
-# OR create .env file with the following structure:
-```
-
 ## 🚀 Available Scripts
 
 | Script | Description |
