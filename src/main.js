@@ -5,6 +5,7 @@ import userRouter from './module/auth/auth.controller.js'
 import { fileURLToPath } from 'node:url';
 import path from 'path';
 import { redisConnection } from './db/redis/connection.js';
+import messageRouter from './module/messages/message.controller.js';
 const app = express()
 app.use(express.json())
 dbConnection()
@@ -14,7 +15,7 @@ const __filename = fileURLToPath(import.meta.url)
 const __direname = path.dirname(__filename)
 const uploadPath = path.resolve(__direname, "../uploads")
 app.use("/uploads", express.static(uploadPath))
-
+app.use("/messages" ,messageRouter)
 app.use("/auth", userRouter)
 // global handle error 
 app.use((error, req, res, next) => {
