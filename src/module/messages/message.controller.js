@@ -1,6 +1,17 @@
 import Router from "express"
+import { getAllMessage } from "./message.service.js"
+import { successResponse } from "../../common/exceptions/success.response.js"
+import { auth } from "../../common/index.js"
 const router = Router()
 
+// get all message for admin 
+router.get("/get-message", auth, async (req, res) => {
+    let data = await getAllMessage()
+    successResponse({
+        res,
+        data,
+    })
+})
 
 
 
