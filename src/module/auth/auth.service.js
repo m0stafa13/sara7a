@@ -22,6 +22,10 @@ export const signUp = async (body, file) => {
     sendEmail({ to: email, message: otp, subject: "OTP to verify sara7a account" })
     // generate unique user name to use it in user uri
     let uniqueName = email.split("@")[0]
+    let checkUserName = await userModel.findOne({ uniqueName })
+    if (checkUserName) {
+        return ConflictException({ message: "user name is already exists change first part of email" })
+    }
     // add user to database
     let addUser = await userModel.create({ email, name, password: newPassword, gender, age, profileImage, uniqueName })
     await set(`otp::${addUser._id}`, otp, 200)
@@ -59,7 +63,7 @@ export const signIn = async (body) => {
             refreshToken,
             url
         }
-    } else { 
+    } else {
         return BadRequestException({ message: "Password is not correct" })
     }
 }

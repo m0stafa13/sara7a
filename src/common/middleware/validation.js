@@ -2,9 +2,6 @@ import z from "zod"
 import { BadRequestException } from "../exceptions/exceptions.js"
 export const validator = (schema) => {
     return (req, res, next) => {
-       
-       
-
         let userAge = req.body ? req.body.age : false
         if (userAge) {
             let age = Number(req.body.age)

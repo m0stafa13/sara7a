@@ -46,7 +46,7 @@ export const generateAccessToken = (token) => {
         case "admin":
             signature = env.adminSignature
             refreshSignature = env.adminRefreshSignature
-            role = user
+            role = "admin"
             break;
         case "user":
             signature = env.userSignature

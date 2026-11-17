@@ -8,7 +8,7 @@ import { messageSchema } from "./message.validation.js"
 const router = Router()
 
 // get all message for admin 
-router.get("/get-message", auth, checkRole(["1"]), async (req, res) => {
+router.get("/get-message", auth, checkRole("1"), async (req, res) => {
     let data = await getAllMessage()
     successResponse({
         res,
@@ -25,7 +25,7 @@ router.post("/send-message", upload().single("image"), validator(messageSchema),
 )
 // get user data using his url 
 router.get("/get-user", async (req, res) => {
-    let data = await getUserData(req.body)
+    let data = await getUserData(req.query)
     successResponse({
         res, data, status: 200
     })

@@ -1,11 +1,11 @@
 import z, { email } from "zod"
-// sign up schema 
-export let signUpSchema = z.strictObject({
+// sign in schema 
+export let signInSchema = z.strictObject({
     email: z.email({ error: "Email is invalid" }),
     password: z.string({ error: "Password must be string" }).max(15).min(6)
 })
-// sign in schema 
-export let singInSchema = signUpSchema.extend({
+// sign up schema 
+export let signUpSchema = signInSchema.extend({
     name: z.string().includes(" ").min(3).max(30),
     age: z.number(),
     confirmPassword: z.string().max(15).min(6)
