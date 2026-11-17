@@ -20,8 +20,10 @@ export const signUp = async (body, file) => {
     let otp = Math.round(Math.random() * 1000000)
     // call send email function 
     sendEmail({ to: email, message: otp, subject: "OTP to verify sara7a account" })
+    // generate unique user name to use it in user uri
+    let uniqueName = email.split("@")[0]
     // add user to database
-    let addUser = await userModel.create({ email, name, password: newPassword, gender, age, profileImage })
+    let addUser = await userModel.create({ email, name, password: newPassword, gender, age, profileImage, uniqueName })
     await set(`otp::${addUser._id}`, otp, 200)
     if (addUser) {
         return {
@@ -50,12 +52,14 @@ export const signIn = async (body) => {
     if (passwordResult) {
         // create token 
         let { accessToken, refreshToken } = await generateToken(checkEmail)
+        let url = `https://sara7a/${checkEmail.uniqueName}`
         return {
             message: "user login successfully",
             token: accessToken,
-            refreshToken
+            refreshToken,
+            url
         }
-    } else {
+    } else { 
         return BadRequestException({ message: "Password is not correct" })
     }
 }
@@ -120,7 +124,7 @@ export const getAllUsers = async () => {
     return {
         message: "no user founded"
     }
-} 
+}
 
 
 
@@ -129,7 +133,7 @@ export const getAllUsers = async () => {
 
 // export const signIn = async (body) => {
 //     let { email, password } = body
-//     // check email found or not 
+//     // check email found or not
 //     let checkEmail = await userModel.findOne({ email })
 //     if (!checkEmail) {
 //         return NotFoundException({ message: "User email is not found" })
@@ -147,7 +151,7 @@ export const getAllUsers = async () => {
 //         let passwordResult = await checkPassword(password, checkEmail.password)
 //         if (passwordResult) {
 //             set(`acceptLogin${checkEmail._id}`, 0, undefined)
-//             // create token 
+//             // create token
 //             let { accessToken, refreshToken } = await generateToken(checkEmail)
 //             return {
 //                 message: "user login successfully",

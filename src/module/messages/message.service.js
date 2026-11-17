@@ -25,3 +25,14 @@ export const sendMessage = async (body, file) => {
     let data = await messageModel.create({ receiverId, content, image })
     return data
 }
+
+// return user data using his uri
+export const getUserData = async (uri) => {
+    let { url } = uri
+    let userName = url.split("/").at(-1)
+    let data = await userModel.findOne({ uniqueName: userName })
+    if (!data) {
+        return NotFoundException({ message: "user not found" })
+    }
+    return data
+}

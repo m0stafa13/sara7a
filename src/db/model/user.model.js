@@ -43,6 +43,11 @@ const userSchema = mongoose.Schema({
     },
     coverImage: {
         type: [String]
+    },
+    uniqueName: {
+        unique: true,
+        required: true,
+        type: String
     }
 
 }, {

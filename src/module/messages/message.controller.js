@@ -1,5 +1,5 @@
 import Router from "express"
-import { getAllMessage, sendMessage } from "./message.service.js"
+import { getAllMessage, getUserData, sendMessage } from "./message.service.js"
 import { successResponse } from "../../common/exceptions/success.response.js"
 import { auth } from "../../common/index.js"
 import { checkRole } from "../../common/service/checkRole.js"
@@ -22,8 +22,13 @@ router.post("/send-message", upload().single("image"), async (req, res) => {
     })
 }
 )
-
-
+// get user data using his url 
+router.get("/get-user", async (req, res) => {
+    let data = await getUserData(req.body)
+    successResponse({
+        res, data, status: 200
+    })
+})
 
 
 export default router
