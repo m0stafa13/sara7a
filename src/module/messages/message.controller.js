@@ -1,5 +1,5 @@
 import Router from "express"
-import { getAllMessage, getUserData, sendMessage } from "./message.service.js"
+import { getAllMessage, getUserData, getUserMessage, sendMessage } from "./message.service.js"
 import { successResponse } from "../../common/exceptions/success.response.js"
 import { auth } from "../../common/index.js"
 import { checkRole } from "../../common/service/checkRole.js"
@@ -28,6 +28,12 @@ router.get("/get-user", async (req, res) => {
     successResponse({
         res, data, status: 200
     })
+})
+
+// get user's message
+router.get("/user-message", auth, async (req, res) => {
+    let data = await getUserMessage(req.user)
+    successResponse({ res, data })
 })
 
 

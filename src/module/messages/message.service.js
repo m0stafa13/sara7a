@@ -36,3 +36,14 @@ export const getUserData = async (uri) => {
     }
     return data
 }
+
+// get user's message if found 
+export const getUserMessage = async (user) => {
+    let { id } = user
+    let message = await messageModel.find({ receiverId: id })
+    if (!message.length > 0) {
+        return NotFoundException({ message: "no messages found " })
+    }
+    return message
+
+}
