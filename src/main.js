@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 import path from 'path';
 import { redisConnection } from './db/redis/connection.js';
 import messageRouter from './module/messages/message.controller.js';
+import reqMessage from './module/conversation/reqMessage.controller.js';
 const app = express()
 app.use(express.json())
 dbConnection()
@@ -15,8 +16,9 @@ const __filename = fileURLToPath(import.meta.url)
 const __direname = path.dirname(__filename)
 const uploadPath = path.resolve(__direname, "../uploads")
 app.use("/uploads", express.static(uploadPath))
-app.use("/messages" ,messageRouter)
+app.use("/messages", messageRouter)
 app.use("/auth", userRouter)
+app.use("/req", reqMessage)
 // global handle error 
 app.use((error, req, res, next) => {
     let stack = env.mode == "prod" ? error.stack : null

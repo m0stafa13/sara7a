@@ -15,7 +15,8 @@ const reqMessageSchema = new mongoose.Schema({
     messageId: {
         type: Types.ObjectId,
         required: true,
-        ref: "message"
+        ref: "message",
+        unique: true
     },
     status: {
         type: String,

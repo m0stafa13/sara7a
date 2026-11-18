@@ -1,6 +1,6 @@
 import mongoose from "mongoose"
 import { genderEnum, providerEnum, roleEnum } from "../../common/index.js"
-const userSchema = mongoose.Schema({
+const userSchema =  mongoose.Schema({
     name: {
         type: String,
         required: true,
