@@ -1,6 +1,6 @@
 import mongoose, { Types } from "mongoose"
 
-const messageSchema =  mongoose.Schema({
+const messageSchema = mongoose.Schema({
     content: {
         type: String,
         required: true,
@@ -12,6 +12,14 @@ const messageSchema =  mongoose.Schema({
         type: Types.ObjectId,
         ref: "user",
         required: true
+    },
+    senderId: {
+        type: Types.ObjectId,
+        required: true
+    },
+    isAvailable: {
+        type: Boolean,
+        default: false
     }
 
 }, {

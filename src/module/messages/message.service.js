@@ -10,8 +10,9 @@ export const getAllMessage = async () => {
 }
 
 // send message 
-export const sendMessage = async (body, file) => {
+export const sendMessage = async (body, file, sender) => {
     let { content, receiverId } = body
+    let { id } = sender
     let image;
     if (file) {
         image = file.path
@@ -22,9 +23,9 @@ export const sendMessage = async (body, file) => {
         return NotFoundException({ message: "The receiver is not found" })
     }
     // sending message 
-    let data = await messageModel.create({ receiverId, content, image })
+    let data = await messageModel.create({ receiverId, content, image, senderId: id })
     return data
-}
+} 
 
 // return user data using his uri
 export const getUserData = async (uri) => {

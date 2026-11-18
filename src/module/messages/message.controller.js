@@ -12,15 +12,15 @@ router.get("/get-message", auth, checkRole("1"), async (req, res) => {
     let data = await getAllMessage()
     successResponse({
         res,
-        data,
+        data, 
     })
 })
 // send message 
-router.post("/send-message", upload().single("image"), validator(messageSchema),     async (req, res) => {
-    let data = await sendMessage(req.body, req.file)
+router.post("/send-message", auth, upload().single("image"), validator(messageSchema),     async (req, res) => {
+    let data = await sendMessage(req.body, req.file , req.user)
     successResponse({
         res, data, status: 201
-    })
+    }) 
 }
 )
 // get user data using his url 
