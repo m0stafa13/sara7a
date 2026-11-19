@@ -1,4 +1,5 @@
-import { ConflictException, NotFoundException } from "../../common/exceptions/exceptions.js";
+import { messageStatusEnum } from "../../common/enum/message.enum.js";
+import { BadRequestException, ConflictException, NotFoundException } from "../../common/exceptions/exceptions.js";
 import { messageModel } from "../../db/model/message.model.js";
 import { requestsModel } from "../../db/model/req.model.js";
 import { userModel } from "../../db/model/user.model.js";
@@ -37,3 +38,33 @@ export const getAllReq = async (user) => {
     }
     return NotFoundException({ message: "No requests found" })
 }
+// accept or reject the req
+export const acceptOrRejectReq = async (body, user) => {
+    let { id } = user
+    let { status, messageId, reqId } = body
+    if (status != 0 && status != 1 && status != 2) {
+        return BadRequestException({ message: "invalid data input" });
+    }
+    // check request
+    let req = await requestsModel.findById(reqId)
+    if (!req) {
+        return NotFoundException({ message: "request is not found" })
+    }
+    // check message 
+    let message = await messageModel.findById(messageId)
+    if (!message) {
+        return NotFoundException({ message: "Message is not found" })
+    }
+    let updateStatus = await requestsModel.findOneAndUpdate({ _id: reqId }, { status }, { returnDocument: "after" })
+    let messageUp
+    if (updateStatus.status == "1") {
+        messageUp = true
+    } else {
+        messageUp = false
+    }
+    await messageModel.findOneAndUpdate({ _id: messageId }, { isAvailable: messageUp }, { returnDocument: "after" })
+    return "Req is updated successfully"
+}
+//     REJECT: 0,
+//     ACCEPT: 1,
+//     PENDING: 2

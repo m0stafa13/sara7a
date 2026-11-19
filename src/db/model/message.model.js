@@ -1,6 +1,6 @@
 import mongoose, { Types } from "mongoose"
 
-const messageSchema = mongoose.Schema({
+const messageSchema = new mongoose.Schema({
     content: {
         type: String,
         required: true,
