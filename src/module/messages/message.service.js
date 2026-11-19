@@ -40,7 +40,7 @@ export const getUserData = async (uri) => {
     return data
 }
 
-// get user's message if found 
+// get user's message if found without populate
 export const getUserMessage = async (user) => {
     let { id } = user
     let message = await messageModel.find({ receiverId: id })
@@ -49,4 +49,12 @@ export const getUserMessage = async (user) => {
     }
     return message
 }
-
+// get message with auth 
+export const getUserMessagePop = async (user) => {
+    let { id } = user
+    let message = await messageModel.find({ receiverId: id, isAvailable: true }).populate("senderId")
+    if (!message.length > 0) {
+        return NotFoundException({ message: "no messages found " })
+    }
+    return message
+}

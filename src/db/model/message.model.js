@@ -15,7 +15,8 @@ const messageSchema = new mongoose.Schema({
     },
     senderId: {
         type: Types.ObjectId,
-        required: true
+        required: true,
+        ref: "user"
     },
     isAvailable: {
         type: Boolean,
