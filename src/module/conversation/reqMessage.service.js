@@ -24,5 +24,16 @@ export const sendReq = async (body, user) => {
     //create req 
     let data = await requestsModel.create({ messageId, senderId: id, receiverId })
     return data
+}
 
+
+
+// get all requests
+export const getAllReq = async (user) => {
+    let { id } = user
+    let getReq = await requestsModel.find({ _id: id })
+    if (getReq.length > 0) {
+        return getReq
+    }
+    return NotFoundException({ message: "No requests found" })
 }

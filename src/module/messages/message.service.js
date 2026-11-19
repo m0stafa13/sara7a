@@ -30,6 +30,8 @@ export const sendMessage = async (body, file, sender) => {
 // return user data using his uri
 export const getUserData = async (uri) => {
     let { url } = uri
+    console.log(url);
+
     let userName = url.split("/").at(-1)
     let data = await userModel.findOne({ uniqueName: userName })
     if (!data) {
@@ -41,7 +43,7 @@ export const getUserData = async (uri) => {
 // get user's message if found 
 export const getUserMessage = async (user) => {
     let { id } = user
-    let message = await messageModel.find({ receiverId: id, isAvailable: true })
+    let message = await messageModel.find({ receiverId: id })
     if (!message.length > 0) {
         return NotFoundException({ message: "no messages found " })
     }

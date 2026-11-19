@@ -25,7 +25,7 @@ router.post("/send-message", auth, upload().single("image"), validator(messageSc
 )
 // get user data using his url 
 router.get("/get-user", async (req, res) => {
-    let data = await getUserData(req.query)
+    let data = await getUserData(req.body)
     successResponse({
         res, data, status: 200
     })
